@@ -83,10 +83,10 @@ export default {
       this.containerHeight = height;
       this.containerWidth = width;
     },
-    computeX(x) {
+    convertX(x) {
       return this.padding + x * this.scaleX;
     },
-    computeY(y) {
+    convertY(y) {
       return (this.height - y) * this.scaleY + this.padding;
     },
     safe(val) {

@@ -1,54 +1,71 @@
 <template>
-<div class="container">
-  <span ref="tooltip" class="tooltip" v-show="activeIndex !== -1">
-    <div>frequency: {{ currentFreq }}</div>
-    <div>range: {{ currentRange }}</div>
-  </span>
-  
-  <svg ref="plot" class="container">
-    <x-axis :ctx="this"/>
-    <y-axis :ctx="this"/>
-    <x-label :ctx="this"/>
-    <y-label :ctx="this"/>
+  <div class="container">
+    <span ref="tooltip" class="tooltip" v-show="activeIndex !== -1">
+      <div>frequency: {{ currentFreq }}</div>
+      <div>range: {{ currentRange }}</div>
+    </span>
+    
+    <svg ref="plot" class="container">
+      <x-axis :ctx="this"></x-axis>
+      <y-axis :ctx="this"></y-axis>
+      <x-label :ctx="this"></x-label>
+      <y-label :ctx="this"></y-label>
 
-    <!-- First index because of boundary issue -->
-    <text
-      :x="computeX(0)" :y="computeY(0) + 20"
-      :fill="colorIndex" :font-size="sizeIndex" text-anchor="middle">
-      {{ range[0] | round }}
-    </text>
-
-    <g v-for="(c, index) in counter" :key="index">
+      <!-- First index because of boundary issue -->
       <text
-        :x="computeX(index + 1)" :y="computeY(0) + 20"
-        :fill="colorIndex" :font-size="sizeIndex" text-anchor="middle"
-        v-if="index % indexMultiplierX === 0">
-        {{ (index + 1) * interval | round }}
-      </text>
+        :x="convertX(0)"
+        :y="convertY(0) + 20"
+        :fill="colorIndex"
+        :font-size="sizeIndex"
+        text-anchor="middle"
+      >{{ range[0] | round }}</text>
 
-      <text
-        :x="computeX(0) - 15" :y="computeY(c) + 5"
-        :fill="colorIndex" :font-size="sizeIndex" text-anchor="middle" 
-        writing-mode="tb-rl"
-        v-show="activeIndex === index">
-        {{ c }}
-      </text>
+      <g v-for="(c, index) in counter" :key="index">
+        <text
+          :x="convertX(index + 1)"
+          :y="convertY(0) + 20"
+          :fill="colorIndex"
+          :font-size="sizeIndex"
+          text-anchor="middle"
+          v-if="index % indexMultiplierX === 0"
+        >{{ (index + 1) * interval | round }}</text>
 
-      <rect class="bar hover" transform="scale(1,-1)"
-          :x="computeX(index)" :y="-(computeY(0))"
-          :width="scaleX" :height="scaleY * c"
-          :fill="colorBar" stroke-width="1" stroke="black"
+        <text
+          :x="convertX(0) - 15"
+          :y="convertY(c) + 5"
+          :fill="colorIndex"
+          :font-size="sizeIndex"
+          text-anchor="middle"
+          writing-mode="tb-rl"
+          v-show="activeIndex === index"
+        >{{ c }}</text>
+
+        <rect
+          class="bar hover"
+          transform="scale(1,-1)"
+          :x="convertX(index)"
+          :y="-(convertY(0))"
+          :width="scaleX"
+          :height="scaleY * c"
+          :fill="colorBar"
+          stroke-width="1"
+          stroke="black"
           @mouseover="activeIndex=index"
-          @mouseout="activeIndex=-1"/>
+          @mouseout="activeIndex=-1"
+        ></rect>
 
-      <line
-        :x1="computeX(0)" :y1="computeY(c)" 
-        :x2="computeX(index)" :y2="computeY(c)" 
-        :stroke="colorHighlighter" stroke-dasharray="5,5"
-        v-show="activeIndex===index"/>
-    </g>
-  </svg>
-</div>
+        <line
+          :x1="convertX(0)"
+          :y1="convertY(c)"
+          :x2="convertX(index)"
+          :y2="convertY(c)"
+          :stroke="colorHighlighter"
+          stroke-dasharray="5 5"
+          v-show="activeIndex===index"
+        ></line>
+      </g>
+    </svg>
+  </div>
 </template>
 
 <script>

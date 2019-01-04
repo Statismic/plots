@@ -1,42 +1,57 @@
 <template>
-<svg ref="plot" class="container">
-  <y-axis :ctx="this"/>
-  <x-axis :ctx="this"/>
-  <y-label :ctx="this"/>
-  <x-label :ctx="this"/>
+  <svg ref="plot" class="container">
+    <y-axis :ctx="this"></y-axis>
+    <x-axis :ctx="this"></x-axis>
+    <y-label :ctx="this"></y-label>
+    <x-label :ctx="this"></x-label>
 
-  <g v-for="(v, index) in dataX" :key="index">
-    <text
-      :x="computeX(v)" :y="computeY(0) + 20"
-      :fill="colorIndex" :font-size="sizeIndex" text-anchor="middle">
-      {{ v }}
-    </text>
-    <text
-      :x="computeX(0) - 15" :y="computeY(dataY[index]) + 5"
-      :fill="colorIndex" :font-size="sizeIndex" text-anchor="middle" 
-      writing-mode="tb-rl">
-      {{ dataY[index] }}
-    </text>
+    <g v-for="(v, index) in dataX" :key="index">
+      <text
+        :x="convertX(v)"
+        :y="convertY(0) + 20"
+        :fill="colorIndex"
+        :font-size="sizeIndex"
+        text-anchor="middle"
+      >{{ v }}</text>
+      <text
+        :x="convertX(0) - 15"
+        :y="convertY(dataY[index]) + 5"
+        :fill="colorIndex"
+        :font-size="sizeIndex"
+        text-anchor="middle"
+        writing-mode="tb-rl"
+      >{{ dataY[index] }}</text>
 
-    <circle class="hover"
-      :cx="computeX(v)" 
-      :cy="computeY(dataY[index])" 
-      :r="sizePoint" :fill="colorPoint"
-      @mouseover="activeIndex=index"
-      @mouseout="activeIndex=-1"/>
+      <circle
+        class="hover"
+        :cx="convertX(v)"
+        :cy="convertY(dataY[index])"
+        :r="sizePoint"
+        :fill="colorPoint"
+        @mouseover="activeIndex=index"
+        @mouseout="activeIndex=-1"
+      ></circle>
 
-    <line 
-      :x1="computeX(0)" :y1="computeY(dataY[index])" 
-      :x2="computeX(v)" :y2="computeY(dataY[index])" 
-      :stroke="colorHighlighter" stroke-dasharray="5,5"
-      v-show="activeIndex===index"/>
-    <line
-      :x1="computeX(v)" :y1="computeY(0)" 
-      :x2="computeX(v)" :y2="computeY(dataY[index])" 
-      :stroke="colorHighlighter" stroke-dasharray="5,5"
-      v-show="activeIndex===index"/>
-  </g>
-</svg>
+      <line
+        :x1="convertX(0)"
+        :y1="convertY(dataY[index])"
+        :x2="convertX(v)"
+        :y2="convertY(dataY[index])"
+        :stroke="colorHighlighter"
+        stroke-dasharray="5 5"
+        v-show="activeIndex===index"
+      ></line>
+      <line
+        :x1="convertX(v)"
+        :y1="convertY(0)"
+        :x2="convertX(v)"
+        :y2="convertY(dataY[index])"
+        :stroke="colorHighlighter"
+        stroke-dasharray="5 5"
+        v-show="activeIndex===index"
+      ></line>
+    </g>
+  </svg>
 </template>
 
 <script>

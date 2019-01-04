@@ -1,9 +1,12 @@
 <template>
-<text
-  :x="ctx.padding - 40" :y="ctx.containerHeight / 2" :fill="ctx.colorLabel"
-  :font-size="ctx.sizeLabel" text-anchor="middle" writing-mode="tb-rl">
-  {{ ctx.labelY }}
-</text>
+  <text
+    :x="ctx.padding - 40"
+    :y="ctx.containerHeight / 2"
+    :fill="ctx.colorLabel"
+    :font-size="ctx.sizeLabel"
+    text-anchor="middle"
+    writing-mode="tb-rl"
+  >{{ ctx.labelY }}</text>
 </template>
 
 <script>
