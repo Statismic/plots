@@ -68,7 +68,7 @@ export default {
 
 
 <style scoped>
-svg * {
+svg >>> * {
   transition: all 1s;
 }
 </style>
