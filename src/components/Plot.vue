@@ -90,6 +90,7 @@ export default {
 
 <style scoped>
 svg >>> * {
-  transition: all 1s;
+  transition: all 0.5s;
+  transition-timing-function: ease-out;
 }
 </style>
