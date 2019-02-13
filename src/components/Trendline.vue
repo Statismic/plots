@@ -56,7 +56,6 @@ export default {
   },
   computed: {
     path() {
-      console.log(this.data);
       return this.lineGenerator(this.data);
     },
     scale() {
