@@ -1,5 +1,13 @@
 <template>
-  <plot type="scatter-plot" :data="data" :options="options"/>
+  <plot
+    type="scatter-plot"
+    :data="data"
+    :options="options"
+    :margin-left="20"
+    :margin-bottom="20"
+    :margin-top="20"
+    :margin-right="20"
+  />
 </template>
 
 <script>

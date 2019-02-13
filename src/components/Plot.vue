@@ -1,6 +1,6 @@
 <template>
   <svg ref="plot" width="100%" height="100%">
-    <g :transform="`translate(${marginLeft} ${marginTop})`">
+    <g :transform="`translate(${this.margin.left} ${this.margin.top})`">
       <component :is="type" :data="data" :width="width" :height="height" :options="options"></component>
     </g>
   </svg>
@@ -23,19 +23,19 @@ export default {
     },
     marginTop: {
       type: Number,
-      default: 20
+      default: 0
     },
     marginLeft: {
       type: Number,
-      default: 30
+      default: 0
     },
     marginBottom: {
       type: Number,
-      default: 20
+      default: 0
     },
     marginRight: {
       type: Number,
-      default: 20
+      default: 0
     },
     options: Object
   },
@@ -45,11 +45,32 @@ export default {
       height: 0
     };
   },
+  computed: {
+    margin() {
+      const safe = num => {
+        num = Number(num);
+        return Number.isNaN(num) || !Number.isFinite(num) ? 0 : num;
+      };
+
+      return {
+        top: safe(this.marginTop) + 20,
+        left: safe(this.marginLeft) + 30,
+        bottom: safe(this.marginBottom) + 20,
+        right: safe(this.marginRight) + 20
+      };
+    }
+  },
   methods: {
     onResize() {
       const { width, height } = this.$refs.plot.getBoundingClientRect();
-      this.width = width - this.marginLeft - this.marginRight;
-      this.height = height - this.marginTop - this.marginBottom;
+
+      this.width = width - this.margin.left - this.margin.right;
+      this.height = height - this.margin.top - this.margin.bottom;
+    }
+  },
+  watch: {
+    margin() {
+      this.onResize();
     }
   },
   mounted() {
