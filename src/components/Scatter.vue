@@ -38,15 +38,11 @@
 
 <script>
 import d3 from "@/assets/d3";
+import base from "./base";
 
 export default {
   name: "scatter-plot",
-  props: {
-    width: Number,
-    height: Number,
-    data: Array,
-    options: Object
-  },
+  mixins: [base],
   data() {
     return {
       activeIndex: -1
@@ -74,15 +70,6 @@ export default {
         },
         ...this.options
       };
-    }
-  },
-  directives: {
-    axis(el, binding) {
-      const axis = binding.arg;
-      const axisMethod = { x: "axisBottom", y: "axisLeft" }[axis];
-      const methodArg = binding.value[axis];
-
-      d3.select(el).call(d3[axisMethod](methodArg));
     }
   }
 };
