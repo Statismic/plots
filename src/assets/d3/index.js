@@ -1,8 +1,7 @@
 import { scaleLinear, scaleTime, scaleBand } from "d3-scale";
 import { axisBottom, axisLeft } from "d3-axis";
 import { select } from "d3-selection";
-
-export { select } from "d3";
+import { line, curveNatural } from "d3-shape";
 
 export default {
   scaleLinear,
@@ -10,5 +9,7 @@ export default {
   scaleBand,
   axisBottom,
   axisLeft,
-  select
+  select,
+  line,
+  curveNatural
 };

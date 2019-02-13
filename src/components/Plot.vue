@@ -8,6 +8,7 @@
 
 <script>
 import ScatterPlot from "./Scatter";
+import Trendline from "./Trendline";
 
 export default {
   name: "plot",
@@ -59,7 +60,15 @@ export default {
     window.removeEventListener("resize", this.onResize);
   },
   components: {
-    ScatterPlot
+    ScatterPlot,
+    Trendline
   }
 };
 </script>
+
+
+<style scoped>
+svg * {
+  transition: all 1s;
+}
+</style>
