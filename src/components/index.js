@@ -1,11 +1,9 @@
 import StatismicHistogram from "./Histogram.vue";
-import StatismicScatterPlot from "./Scatter.vue";
-import StatismicTrendline from "./Trendline.vue";
+import Plot from "./Plot.vue";
 
 const components = {
   StatismicHistogram,
-  StatismicScatterPlot,
-  StatismicTrendline
+  Plot
 };
 
 export default {
