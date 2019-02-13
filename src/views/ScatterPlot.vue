@@ -1,18 +1,20 @@
 <template>
-<scatter-plot label-x="X Label" label-y="Y Label" :data-x="xdata" :data-y="ydata"/>
+  <plot type="scatter-plot" :data="data" :options="options"/>
 </template>
 
 <script>
-import ScatterPlot from "@/components/Scatter.vue";
+import Plot from "@/components/Plot.vue";
 
 export default {
   components: {
-    ScatterPlot
+    Plot
   },
   data() {
     return {
-      xdata: [0, 1, 3, 5],
-      ydata: [0, 7, 3, 5]
+      data: [{ x: 0, y: 0 }, { x: 1, y: 7 }, { x: 3, y: 3 }, { x: 5, y: 5 }],
+      options: {
+        sizePoint: 3
+      }
     };
   }
 };
