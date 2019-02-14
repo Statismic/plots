@@ -1,7 +1,7 @@
 <template>
   <g>
     <!-- Axes -->
-    <g v-axis:y="{scale: scale, chain: gridFn}"></g>
+    <g v-axis:y="{scale: scale}"></g>
     <g v-axis:x="{scale: scale}" :transform="`translate(0, ${height})`"></g>
 
     <!-- Axes Labels -->
@@ -51,9 +51,11 @@ export default {
         .domain(this.data.map(v => v["x"]))
         .rangeRound([0, this.width]);
 
+      const yBound = Math.max(...this.data.map(v => v["y"]));
       const y = d3
         .scaleLinear()
-        .domain([0, Math.max(...this.data.map(v => v["y"]))])
+        // TODO! This is a hack only so that the bar will not show up when there's no data
+        .domain([0, yBound === 0 ? this.height : yBound])
         .rangeRound([this.height, 0]);
 
       return { x, y };
@@ -87,6 +89,6 @@ export default {
 <style scoped>
 .bar:hover {
   cursor: pointer;
-  opacity: 0.75;
+  opacity: 0.4;
 }
 </style>

@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      data: [{ x: "Golang", y: 300 }, { x: "C", y: 100 }]
+      data: [{ x: "Golang", y: 300 }, { x: "C", y: 0 }]
     };
   },
   methods: {
