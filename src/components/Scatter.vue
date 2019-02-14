@@ -1,6 +1,7 @@
 <template>
   <g>
     <g v-for="(v, index) in data" :key="index">
+      <!-- Points -->
       <circle
         :cx="scale.x(v.x)"
         :cy="scale.y(v.y)"
@@ -10,6 +11,7 @@
         style="cursor: pointer"
       />
 
+      <!-- Dotted Hint Lines -->
       <line
         :x1="scale.x(0)"
         :y1="scale.y(v.y)"
@@ -19,7 +21,6 @@
         stroke-dasharray="5 5"
         v-show="activeIndex===index"
       ></line>
-
       <line
         :x1="scale.x(v.x)"
         :y1="scale.y(0)"
@@ -31,18 +32,32 @@
       ></line>
     </g>
 
+    <!-- Axes -->
     <g v-axis:y="scale"></g>
     <g v-axis:x="scale" :transform="`translate(0, ${height})`"></g>
+
+    <!-- Axes Labels -->
+    <label-x :width="width" :height="height">{{ this.options.labelX }}</label-x>
+    <label-y :width="width" :height="height">{{ this.options.labelY }}</label-y>
+
+    <!-- Title -->
+    <chart-title :width="width" :height="height">{{ this.options.title }}</chart-title>
   </g>
 </template>
 
 <script>
 import d3 from "@/assets/d3";
 import base from "./base";
+import { LabelX, LabelY, ChartTitle } from "./parts";
 
 export default {
   name: "scatter-plot",
   mixins: [base],
+  components: {
+    LabelX,
+    LabelY,
+    ChartTitle
+  },
   data() {
     return {
       activeIndex: -1
@@ -66,7 +81,10 @@ export default {
     _options() {
       return {
         ...{
-          sizePoint: 3
+          title: "",
+          labelX: "",
+          labelY: "",
+          sizePoint: 5
         },
         ...this.options
       };

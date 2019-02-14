@@ -34,16 +34,29 @@
 
     <g v-axis:y="scale"></g>
     <g v-axis:x="scale" :transform="`translate(0, ${height})`"></g>
+
+    <!-- Axes Labels -->
+    <label-x :width="width" :height="height">{{ this.options.labelX }}</label-x>
+    <label-y :width="width" :height="height">{{ this.options.labelY }}</label-y>
+
+    <!-- Title -->
+    <chart-title :width="width" :height="height">{{ this.options.title }}</chart-title>
   </g>
 </template>
 
 <script>
 import d3 from "@/assets/d3";
 import base from "./base";
+import { LabelX, LabelY, ChartTitle } from "./parts";
 
 export default {
   name: "trendline",
   mixins: [base],
+  components: {
+    LabelX,
+    LabelY,
+    ChartTitle
+  },
   data() {
     return {
       activeIndex: -1,

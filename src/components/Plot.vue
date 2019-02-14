@@ -53,9 +53,9 @@ export default {
       };
 
       return {
-        top: safe(this.marginTop) + 20,
-        left: safe(this.marginLeft) + 30,
-        bottom: safe(this.marginBottom) + 20,
+        top: safe(this.marginTop) + 50,
+        left: safe(this.marginLeft) + 60,
+        bottom: safe(this.marginBottom) + 50,
         right: safe(this.marginRight) + 20
       };
     }
