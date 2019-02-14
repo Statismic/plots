@@ -1,8 +1,6 @@
-import StatismicHistogram from "./Histogram.vue";
 import Plot from "./Plot.vue";
 
 const components = {
-  StatismicHistogram,
   Plot
 };
 
