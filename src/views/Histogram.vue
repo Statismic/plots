@@ -1,25 +1,28 @@
 <template>
-<div>
-  <histogram label-x="X Label" label-y="Y Label" :data-x="xdata" :interval="0.1" style="height: 600px;"/>
-  <button @click="add" style="margin: 60px auto;">Add</Button>
-</div>
+  <div>
+    <plot type="histogram" :data="data" style="height: 600px;"/>
+    <button @click="add" style="margin: 60px auto;">Add</button>
+  </div>
 </template>
 
 <script>
-import Histogram from "@/components/Histogram.vue";
+import Plot from "@/components/Plot.vue";
 
 export default {
   components: {
-    Histogram
+    Plot
   },
   data() {
     return {
-      xdata: [0.9]
+      data: [{ x: "Golang", y: 300 }, { x: "C", y: 100 }]
     };
   },
   methods: {
     add() {
-      this.xdata.push(Math.random());
+      this.data.push({
+        x: "random",
+        y: Math.floor(Math.random() * Math.floor(1000))
+      });
     }
   }
 };

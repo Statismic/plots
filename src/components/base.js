@@ -11,9 +11,14 @@ export default {
     axis(el, binding) {
       const axis = binding.arg;
       const axisMethod = { x: "axisBottom", y: "axisLeft" }[axis];
-      const methodArg = binding.value[axis];
+      const scale = binding.value["scale"][axis];
+      const chainFn = binding.value["chain"];
 
-      d3.select(el).call(d3[axisMethod](methodArg));
+      let axisObj = d3[axisMethod](scale);
+      if (chainFn !== undefined) {
+        axisObj = chainFn(axisObj);
+      }
+      d3.select(el).call(axisObj);
     }
   }
 };

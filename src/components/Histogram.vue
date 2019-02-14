@@ -1,182 +1,92 @@
 <template>
-  <div class="container">
-    <span ref="tooltip" class="tooltip" v-show="activeIndex !== -1">
-      <div>frequency: {{ currentFreq }}</div>
-      <div>range: {{ currentRange }}</div>
-    </span>
-    
-    <svg ref="plot" class="container">
-      <x-axis :ctx="this"></x-axis>
-      <y-axis :ctx="this"></y-axis>
-      <x-label :ctx="this"></x-label>
-      <y-label :ctx="this"></y-label>
+  <g>
+    <!-- Axes -->
+    <g v-axis:y="{scale: scale, chain: gridFn}"></g>
+    <g v-axis:x="{scale: scale}" :transform="`translate(0, ${height})`"></g>
 
-      <!-- First index because of boundary issue -->
-      <text
-        :x="convertX(0)"
-        :y="convertY(0) + 20"
-        :fill="colorIndex"
-        :font-size="sizeIndex"
-        text-anchor="middle"
-      >{{ range[0] | round }}</text>
+    <!-- Axes Labels -->
+    <label-x :width="width" :height="height">{{ this.options.labelX }}</label-x>
+    <label-y :width="width" :height="height">{{ this.options.labelY }}</label-y>
 
-      <g v-for="(c, index) in counter" :key="index">
-        <text
-          :x="convertX(index + 1)"
-          :y="convertY(0) + 20"
-          :fill="colorIndex"
-          :font-size="sizeIndex"
-          text-anchor="middle"
-          v-if="index % indexMultiplierX === 0"
-        >{{ (index + 1) * interval | round }}</text>
+    <!-- Title -->
+    <chart-title :width="width" :height="height">{{ this.options.title }}</chart-title>
 
-        <text
-          :x="convertX(0) - 15"
-          :y="convertY(c) + 5"
-          :fill="colorIndex"
-          :font-size="sizeIndex"
-          text-anchor="middle"
-          writing-mode="tb-rl"
-          v-show="activeIndex === index"
-        >{{ c }}</text>
-
-        <rect
-          class="bar hover"
-          transform="scale(1,-1)"
-          :x="convertX(index)"
-          :y="-(convertY(0))"
-          :width="scaleX"
-          :height="scaleY * c"
-          :fill="colorBar"
-          stroke-width="1"
-          stroke="black"
-          @mouseover="activeIndex=index"
-          @mouseout="activeIndex=-1"
-        ></rect>
-
-        <line
-          :x1="convertX(0)"
-          :y1="convertY(c)"
-          :x2="convertX(index)"
-          :y2="convertY(c)"
-          :stroke="colorHighlighter"
-          stroke-dasharray="5 5"
-          v-show="activeIndex===index"
-        ></line>
-      </g>
-    </svg>
-  </div>
+    <g v-for="(v, index) in data" :key="index">
+      <!-- Points -->
+      <rect
+        :x="scale.x(v.x)"
+        :y="-height"
+        :width="barWidth"
+        :height="height - scale.y(v.y)"
+        transform="scale(1,-1)"
+        :fill="_options.barColor"
+        :stroke="_options.barStrokeColor"
+        :stroke-width="_options.barStrokeWidth"
+        class="bar"
+      />
+    </g>
+  </g>
 </template>
 
 <script>
-import BaseMixins from "./base";
-import { XAxis, YAxis, XLabel, YLabel } from "./parts";
+import d3 from "@/assets/d3";
+import base from "./base";
+import { LabelX, LabelY, ChartTitle } from "./parts";
 
 export default {
-  /**
-    range: range of min max of data-x
-    color-bar: color for bars in the histogram
-    color-highlighter: color for helper lines when you hover bars 
-   */
-  mixins: [BaseMixins],
-  props: {
-    range: {
-      type: Array,
-      // Min-max of dataX [min, max]
-      default: () => [0, 1]
-    },
-    interval: {
-      type: Number,
-      required: true
-    },
-
-    // Design Customizations
-    colorBar: {
-      type: String,
-      default: "green"
-    },
-    colorHighlighter: {
-      type: String,
-      default: "black"
-    }
-  },
+  name: "histogram",
+  mixins: [base],
   components: {
-    YAxis,
-    XAxis,
-    XLabel,
-    YLabel
+    LabelX,
+    LabelY,
+    ChartTitle
   },
   data() {
-    return {
-      activeIndex: -1 // Index based on xdata
-    };
+    return {};
   },
   computed: {
-    counter() {
-      const n = Math.floor((this.range[1] - this.range[0]) / this.interval);
-      let counter = Array.from({ length: n }, () => 0);
-      if (this.dataX === undefined || this.dataX.length === 0) return counter;
-      const hash = val => {
-        const h = Math.floor(val / this.interval);
-        return h === n ? h - 1 : h; // This is to handle the last value
-      };
-      for (let v of this.dataX) counter[hash(v)]++;
+    scale() {
+      const x = d3
+        .scaleBand()
+        .domain(this.data.map(v => v["x"]))
+        .rangeRound([0, this.width]);
 
-      return counter;
+      const y = d3
+        .scaleLinear()
+        .domain([0, Math.max(...this.data.map(v => v["y"]))])
+        .rangeRound([this.height, 0]);
+
+      return { x, y };
     },
-    currentFreq() {
-      return this.activeIndex >= 0 ? this.counter[this.activeIndex] : 0;
+    barWidth() {
+      return this.width / (this.data.length === 0 ? 1 : this.data.length);
     },
-    currentRange() {
-      if (this.activeIndex < 0) return "";
-      const low = this.activeIndex * this.interval;
-      const high = low + this.interval;
-      return `${low.toPrecision(2)} - ${high.toPrecision(2)}`;
-    },
-    width() {
-      return this.counter.length;
-    },
-    height() {
-      const max = Math.max(...this.counter);
-      return max === 0 ? 1 : max;
-    },
-    indexMultiplierX() {
-      return Math.ceil(this.counter.length / this.nIndexX);
+    // options after normalized
+    _options() {
+      return {
+        ...{
+          title: "",
+          labelX: "",
+          labelY: "",
+          barColor: "blue",
+          barStrokeColor: "black",
+          barStrokeWidth: "2"
+        },
+        ...this.options
+      };
     }
   },
-  mounted() {
-    window.addEventListener("mousemove", this.tooltipHandler);
-  },
-  beforeDestroy() {
-    window.removeEventListener("mousemove", this.tooltipHandler);
-  },
   methods: {
-    tooltipHandler(e) {
-      this.$refs.tooltip.style.left = e.pageX + "px";
-      this.$refs.tooltip.style.top = e.pageY + "px";
+    gridFn(axisObj) {
+      return axisObj.tickSize(-this.width, 0, 0);
     }
   }
 };
 </script>
 
 <style scoped>
-@import "./base.css";
-
-.bar {
-  -webkit-transition: width 0.4s ease 0s, height 0.4s ease 0s;
-  -moz-transition: width 0.4s ease 0s, height 0.4s ease 0s;
-  -o-transition: width 0.4s ease 0s, height 0.4s ease 0s;
-  transition: width 0.4s ease 0s, height 0.4s ease 0s;
-}
-
-.tooltip {
-  padding: 10px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  font-size: 0.8em;
-  position: absolute;
-  z-index: 1;
+.bar:hover {
+  cursor: pointer;
+  opacity: 0.75;
 }
 </style>

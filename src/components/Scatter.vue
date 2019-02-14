@@ -33,8 +33,8 @@
     </g>
 
     <!-- Axes -->
-    <g v-axis:y="scale"></g>
-    <g v-axis:x="scale" :transform="`translate(0, ${height})`"></g>
+    <g v-axis:y="{scale: scale}"></g>
+    <g v-axis:x="{scale: scale}" :transform="`translate(0, ${height})`"></g>
 
     <!-- Axes Labels -->
     <label-x :width="width" :height="height">{{ this.options.labelX }}</label-x>

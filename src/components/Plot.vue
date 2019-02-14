@@ -9,6 +9,7 @@
 <script>
 import ScatterPlot from "./Scatter";
 import Trendline from "./Trendline";
+import Histogram from "./Histogram";
 
 export default {
   name: "plot",
@@ -37,7 +38,10 @@ export default {
       type: Number,
       default: 0
     },
-    options: Object
+    options: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -82,7 +86,8 @@ export default {
   },
   components: {
     ScatterPlot,
-    Trendline
+    Trendline,
+    Histogram
   }
 };
 </script>
