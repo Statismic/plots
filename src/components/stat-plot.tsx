@@ -54,8 +54,8 @@ export class PlotComponent {
     return (
       <svg width="100%" height="100%">
         <g transform={`translate(${_margin.left} ${_margin.top})`}>
-          {_map[this.type](JSON.parse(this.data), {
-            ...JSON.parse(this.options),
+          {_map[this.type](this.data, {
+            ...this.options,
             width: this.width,
             height: this.height
           })}

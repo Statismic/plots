@@ -10,10 +10,21 @@
     <script src="/build/statismic.js"></script>
   </head>
   <body>
-    <stat-plot
-      type="scatter"
-      data='[{"x":10,"y":20},{"x":300,"y":400}]'
-      options='{ "sizePoint": 5}'
-    ></stat-plot>
+    <stat-plot type="scatter"></stat-plot>
+
+    <script>
+      const plot = document.querySelector("stat-plot");
+      plot.data = [];
+
+      function randint(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+      }
+
+      setInterval(() => {
+        plot.data = [...plot.data, { x: randint(0, 100), y: randint(0, 100) }];
+      }, 1000);
+    </script>
   </body>
 </html>
