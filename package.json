@@ -1,7 +1,10 @@
 {
   "name": "@statismic/plots",
   "main": "./dist/plots.umd.min.js",
-  "version": "0.2.7",
+  "browser": {
+    "./sfc": "src/components/Plot.vue"
+  },
+  "version": "0.2.8",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
