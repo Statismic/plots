@@ -1,44 +1,27 @@
 {
-  "name": "@statismic/plots",
-  "main": "./dist/plots.umd.min.js",
-  "browser": {
-    "./sfc": "src/components/Plot.vue"
-  },
-  "version": "0.2.8",
-  "private": false,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest 'docs' --modern",
-    "build:bundle": "vue-cli-service build --target lib --name 'plots' ./src/components/Plot.vue",
-    "lint": "vue-cli-service lint",
-    "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
-  },
+  "name": "plots-new",
+  "version": "0.0.1",
+  "description": "Stencil Component Starter",
+  "module": "dist/esm/index.js",
+  "main": "dist/index.js",
+  "unpkg": "dist/ionic.js",
+  "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
   "files": [
-    "dist/*",
-    "src/*",
-    "public/*",
-    "*.json",
-    "*.js"
+    "dist/"
   ],
+  "scripts": {
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll"
+  },
   "dependencies": {
-    "d3": "^5.9.1",
-    "vue": "^2.5.17"
+    "@types/d3": "^5.7.1",
+    "d3": "^5.9.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.1.1",
-    "@vue/cli-plugin-e2e-nightwatch": "^3.1.1",
-    "@vue/cli-plugin-eslint": "^3.1.1",
-    "@vue/cli-plugin-unit-jest": "^3.1.1",
-    "@vue/cli-service": "^3.1.1",
-    "@vue/eslint-config-prettier": "^4.0.0",
-    "@vue/test-utils": "^1.0.0-beta.20",
-    "vue-router": "^3.0.1",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
-    "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0-0",
-    "vue-template-compiler": "^2.5.17"
-  }
+    "@stencil/core": "~0.16.2"
+  },
+  "license": "MIT"
 }
