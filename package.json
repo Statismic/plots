@@ -1,12 +1,12 @@
 {
   "name": "@statismic/plots",
-  "main": "./dist/plots.common.js",
-  "version": "0.2.6",
+  "main": "./dist/plots.umd.min.js",
+  "version": "0.2.7",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --dest 'docs' --modern",
-    "build:bundle": "vue-cli-service build --target lib --name 'plots' ./src/components/index.js",
+    "build:bundle": "vue-cli-service build --target lib --name 'plots' ./src/components/Plot.vue",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
